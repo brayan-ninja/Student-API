@@ -1,13 +1,13 @@
 // we are using express for the routing
 const express = require('express');
-const routes = require('./routes/API')
+const studentroute = require('./routes/student_route')
 require('dotenv').config();
 require('./helpers/init_mongodb');
 const app = express();
-app.use(express.json());
 
 // Use your routes here
-app.use(routes);
+app.use(express.json());
+app.use(studentroute);
 
 
 // Handling 404 error
