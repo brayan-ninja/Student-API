@@ -1,34 +1,41 @@
-// we are using express for the routing
+// We are using Express for routing
 const express = require('express');
-const studentroute = require('./routes/student_route')
+const studentRoute = require('./routes/student_route'); 
+const courseRoute = require('./routes/course_routes'); 
+const userRoute = require('./routes/user_routes');
 require('dotenv').config();
 require('./helpers/init_mongodb');
+
 const app = express();
 
-// Use your routes here
+// Middleware to parse JSON requests
 app.use(express.json());
-app.use(studentroute);
 
+// Use your routes here
+app.use(studentRoute); // Optional: prefix routes for better organization
+app.use(courseRoute);    // Optional: prefix routes for better organization
+app.use(userRoute);        // Optional: prefix routes for better organization
 
 // Handling 404 error
-app.use((req, res, next)=>{
+app.use((req, res, next) => {
     const err = new Error("Not Found");
-    err.status = 404
-    next(err)
+    err.status = 404;
+    next(err);
 });
 
 // Error handler
-app.use((err, req, res, next)=>{
-    res.status(err.status || 500)
+app.use((err, req, res, next) => {
+    res.status(err.status || 500);
     res.send({
-        error:{
+        error: {
             status: err.status || 500,
             message: err.message
         }
-    })
+    });
 });
 
-// setting up a server
-app.listen(process.env.PORT || 4000, function(){
-    console.log('Now listening for requests on: http://localhost:4000')
+// Setting up a server
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+    console.log(`Now listening for requests on: http://localhost:${PORT}`);
 });
